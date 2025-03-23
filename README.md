@@ -1,4 +1,88 @@
+## 📦 **Generic Filters Controller for ros2_controls**  
 
+### 🔍 **Overview**  
+The **Generic Filters Controller** is a plugin for the **ros2_controls** framework, designed to apply customizable filtering to state or command interfaces in a robot control system. It is based on the initial implementation from the **ROSCon 2024 Control Workshop**, where a basic chained filter example was showcased.  
+
+This project moves the filter to the **ros2_controls** repository, enhances it with parameterization, and adds comprehensive testing. The controller leverages ROS2's **control_toolbox** package to support multiple filter types, including:  
+
+- 🏞️ **Low-Pass Filter** — Smooths data by reducing high-frequency noise.  
+- 🎚️ **High-Pass Filter** — Captures rapid changes by filtering out low-frequency components.  
+- 🏗️ **Median Filter** — Useful for eliminating outliers and spikes in data.
+
+---
+
+## 📂 **Project Structure**  
+```plaintext
+ros2_controls/
+├── ros2_controllers/
+│   ├── src/
+│   │   └── generic_filters_controller/
+│   │       ├── generic_filters_controller.cpp
+│   │       └── generic_filters_controller.hpp
+│   ├── include/
+│   │   └── generic_filters_controller/
+│   │       └── generic_filters_controller.hpp
+│   ├── plugin/
+│   │   └── generic_filters_controller.xml
+│   ├── test/
+│       └── test_generic_filters_controller.cpp
+```
+
+---
+
+## 🚀 **Installation Instructions**  
+1. **Create a Workspace:**  
+```bash
+mkdir -p ~/ros2_ws/src && cd ~/ros2_ws/src
+```
+
+2. **Clone Required Repositories:**  
+```bash
+git clone https://github.com/ros-controls/ros2_controls.git
+git clone https://github.com/ros-controls/ros2_control_demos.git
+git clone https://github.com/ros-controls/control_toolbox.git
+git clone https://github.com/ros-controls/roscon2024_control_workshop.git
+```
+
+3. **Source ROS2 Environment:**  
+```bash
+source /opt/ros/humble/setup.bash
+```
+
+4. **Build the Workspace:**  
+```bash
+cd ~/ros2_ws
+colcon build --symlink-install
+source install/setup.bash
+```
+
+## 🏗️ **How It Works**  
+- **Input Interfaces:** Reads data from state interfaces.  
+- **Filter Application:** Applies the selected filter type.  
+- **Output Interfaces:** Writes filtered values to a new interface.  
+
+This structure allows chaining multiple controllers or processing state data before use.
+
+---
+
+## 🧪 **Testing**  
+Comprehensive unit and integration tests are provided to ensure the controller works as expected.  
+
+### **Run Tests:**  
+```bash
+colcon test --packages-select ros2_controllers
+colcon test-result --verbose
+```
+
+✅ **Tests cover:**  
+- **Correct filter application** for each filter type.  
+- **Edge cases** such as empty inputs and extreme values.  
+- **Chaining multiple controllers** for advanced processing.  
+
+---
+
+
+🚀 **Enjoy clean, smooth control data with the Generic Filters Controller!**
 # ✅ **Step 1: Setup Repositories & Environment**
 
 ⏱️ **Time Estimate:** 1-2 hours  
