@@ -1,368 +1,262 @@
-## 📦 **Generic Filters Controller for ros2_controls**  
+### ✅ **Comprehensive Plan to Implement a Generic "Filters" Plugin for `ros2_controls`**
 
-### 🔍 **Overview**  
-The **Generic Filters Controller** is a plugin for the **ros2_controls** framework, designed to apply customizable filtering to state or command interfaces in a robot control system. It is based on the initial implementation from the **ROSCon 2024 Control Workshop**, where a basic chained filter example was showcased.  
-
-This project moves the filter to the **ros2_controls** repository, enhances it with parameterization, and adds comprehensive testing. The controller leverages ROS2's **control_toolbox** package to support multiple filter types, including:  
-
-- 🏞️ **Low-Pass Filter** — Smooths data by reducing high-frequency noise.  
-- 🎚️ **High-Pass Filter** — Captures rapid changes by filtering out low-frequency components.  
-- 🏗️ **Median Filter** — Useful for eliminating outliers and spikes in data.
+This plan provides a step-by-step guide to creating, integrating, and testing a **generic filters plugin** for **`ros2_controls`**. It includes repository structure, build instructions, file modifications, and testing details.
 
 ---
 
-## 📂 **Project Structure**  
-```plaintext
-ros2_controls/
-├── ros2_controllers/
-│   ├── src/
-│   │   └── generic_filters_controller/
-│   │       ├── generic_filters_controller.cpp
-│   │       └── generic_filters_controller.hpp
-│   ├── include/
-│   │   └── generic_filters_controller/
-│   │       └── generic_filters_controller.hpp
-│   ├── plugin/
-│   │   └── generic_filters_controller.xml
-│   ├── test/
-│       └── test_generic_filters_controller.cpp
-```
+## **1. Clone and Prepare Repositories**
+Ensure you have all the relevant repositories cloned.
 
----
-
-## 🚀 **Installation Instructions**  
-1. **Create a Workspace:**  
+### **Commands:**
 ```bash
-mkdir -p ~/ros2_ws/src && cd ~/ros2_ws/src
-```
+# Navigate to your ROS2 workspace
+mkdir -p /workspaces/ros2_ws/src
+cd /workspaces/ros2_ws/src
 
-2. **Clone Required Repositories:**  
-```bash
+# Clone necessary repositories
 git clone https://github.com/ros-controls/ros2_controls.git
 git clone https://github.com/ros-controls/ros2_control_demos.git
 git clone https://github.com/ros-controls/control_toolbox.git
 git clone https://github.com/ros-controls/roscon2024_control_workshop.git
-```
 
-3. **Source ROS2 Environment:**  
-```bash
+# Source the ROS2 environment
 source /opt/ros/humble/setup.bash
 ```
 
-4. **Build the Workspace:**  
+---
+
+## **2. Understanding the Repositories**
+- **`ros2_controls`**: Core ROS2 control framework.
+- **`ros2_control_demos`**: Example usage and demonstrations.
+- **`control_toolbox`**: Provides utility controllers and filters.
+- **`roscon2024_control_workshop`**: Contains the initial filter blueprint.  
+
+### 🔍 **Filter Blueprint:**  
+Located in:  
+**`roscon2024_control_workshop/workshop_controllers/src/chained_filter_done.cpp`**  
+This is the starting point for your plugin.
+
+---
+
+## **3. Create the Generic Filters Plugin in `ros2_controls`**
+We need to create a new plugin in **`ros2_controls/ros2_controllers`**.
+
+### **Step-by-Step:**
+
+### ✅ **File Structure:**
 ```bash
-cd ~/ros2_ws
-colcon build --symlink-install
-source install/setup.bash
-```
-
-## 🏗️ **How It Works**  
-- **Input Interfaces:** Reads data from state interfaces.  
-- **Filter Application:** Applies the selected filter type.  
-- **Output Interfaces:** Writes filtered values to a new interface.  
-
-This structure allows chaining multiple controllers or processing state data before use.
-
----
-
-## 🧪 **Testing**  
-Comprehensive unit and integration tests are provided to ensure the controller works as expected.  
-
-### **Run Tests:**  
-```bash
-colcon test --packages-select ros2_controllers
-colcon test-result --verbose
-```
-
-✅ **Tests cover:**  
-- **Correct filter application** for each filter type.  
-- **Edge cases** such as empty inputs and extreme values.  
-- **Chaining multiple controllers** for advanced processing.  
-
----
-
-
-🚀 **Enjoy clean, smooth control data with the Generic Filters Controller!**
-# ✅ **Step 1: Setup Repositories & Environment**
-
-⏱️ **Time Estimate:** 1-2 hours  
-
-### **Objective:**  
-Prepare the development environment by setting up the workspace and cloning all necessary repositories. Ensure ROS2 (Humble/Rolling) is properly sourced.
-
----
-
-### 🔍 **Why This Matters:**  
-Having an organized workspace ensures efficient compilation and debugging of **ros2_controls** packages.
-
----
-
-### 📂 **Workspace File Structure (After This Step):**  
-```plaintext
-~/ros2_ws/src/
-├── roscon2024_control_workshop/               # Contains original filter example
-├── ros2_controls/                             # Main repo for ros2 controllers
-├── ros2_control_demos/                        # For demos and examples
-├── control_toolbox/                           # Provides ready-made filters
-```
-
----
-
-### 💻 **Commands to Run:**  
-```bash
-# 1. Create a workspace
-mkdir -p ~/ros2_ws/src && cd ~/ros2_ws/src
-
-# 2. Clone required repositories
-git clone https://github.com/ros-controls/roscon2024_control_workshop.git
-git clone https://github.com/ros-controls/ros2_controls.git
-git clone https://github.com/ros-controls/ros2_control_demos.git
-git clone https://github.com/ros-controls/control_toolbox.git
-
-# 3. Source ROS2
-source /opt/ros/humble/setup.bash
-
-# 4. Build the workspace
-cd ~/ros2_ws
-colcon build --symlink-install
-```
-
-✅ **Verify Installation:**  
-```bash
-source install/setup.bash
-ros2 pkg list | grep ros2_controls
-```
-
----
-
----
-
-# ✅ **Step 2: Migrate the Filter from Workshop to ros2_controls**
-
-⏱️ **Time Estimate:** 2-3 hours  
-
-### **Objective:**  
-Move the **filter controller** from the **ROSCon 2024 workshop** repository to the **ros2_controls** package.
-
----
-
-### 🔍 **Why This Matters:**  
-The existing filter is a proof of concept. Migrating it to **ros2_controls** enables **reusability**, **maintainability**, and **extensibility**.
-
----
-
-### 📂 **File Structure (After This Step):**  
-```plaintext
 ros2_controls/
 ├── ros2_controllers/
 │   ├── src/
-│       └── generic_filters_controller/
-│           ├── generic_filters_controller.cpp
-│           └── generic_filters_controller.hpp
-│   ├── plugin/
-│       └── generic_filters_controller.xml
+│   │   ├── generic_filters_controller/
+│   │   │   ├── include/
+│   │   │   │   └── generic_filters_controller/
+│   │   │   │       └── generic_filters_controller.hpp
+│   │   │   ├── src/
+│   │   │   │   └── generic_filters_controller.cpp
+│   │   │   ├── CMakeLists.txt
+│   │   │   ├── package.xml
+│   │   │   ├── plugin_description.xml
 ```
 
 ---
 
-### 💻 **Commands to Run:**  
-```bash
-# 1. Create the necessary directories
-cd ~/ros2_ws/src/ros2_controls/ros2_controllers
-mkdir -p src/generic_filters_controller
-mkdir -p include/generic_filters_controller
-mkdir -p plugin
+## **4. Implement the Filter Plugin**
+### 🔨 **4.1. Create the Header File**
+**Location:**  
+`include/generic_filters_controller/generic_filters_controller.hpp`
 
-# 2. Copy the existing filter from the workshop
-cp ~/ros2_ws/src/roscon2024_control_workshop/workshop_controllers/src/chained_filter_done.cpp \
-   src/generic_filters_controller/generic_filters_controller.cpp
+```cpp
+#pragma once
 
-# 3. Rename headers and update include paths
-mv src/generic_filters_controller/chained_filter_done.cpp \
-   src/generic_filters_controller/generic_filters_controller.cpp
+#include <controller_interface/controller_interface.hpp>
+#include <rclcpp_lifecycle/lifecycle_node.hpp>
+#include <control_toolbox/filter_functions.hpp>
+
+namespace generic_filters_controller
+{
+class GenericFiltersController : public controller_interface::ControllerInterface
+{
+public:
+  GenericFiltersController() = default;
+
+  controller_interface::CallbackReturn on_init() override;
+  controller_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
+  controller_interface::return_type update(const rclcpp::Time & time, const rclcpp::Duration & period) override;
+
+private:
+  double filtered_output_;
+};
+}  // namespace generic_filters_controller
 ```
 
 ---
 
-### ✏️ **Edit the Plugin File (generic_filters_controller.xml):**  
+### 🔨 **4.2. Create the Source File**
+**Location:**  
+`src/generic_filters_controller.cpp`
+
+```cpp
+#include "generic_filters_controller/generic_filters_controller.hpp"
+#include <pluginlib/class_list_macros.hpp>
+
+namespace generic_filters_controller
+{
+
+controller_interface::CallbackReturn GenericFiltersController::on_init()
+{
+  RCLCPP_INFO(get_node()->get_logger(), "Initializing Generic Filters Controller");
+  return controller_interface::CallbackReturn::SUCCESS;
+}
+
+controller_interface::CallbackReturn GenericFiltersController::on_configure(const rclcpp_lifecycle::State &)
+{
+  RCLCPP_INFO(get_node()->get_logger(), "Configuring Generic Filters Controller");
+  filtered_output_ = 0.0;  // Initialize output
+  return controller_interface::CallbackReturn::SUCCESS;
+}
+
+controller_interface::return_type GenericFiltersController::update(const rclcpp::Time &, const rclcpp::Duration & period)
+{
+  // Example filter: Exponential moving average
+  double input = 1.0;  // Replace with real input
+  double alpha = 0.5;  // Smoothing factor
+  filtered_output_ = alpha * input + (1 - alpha) * filtered_output_;
+  
+  RCLCPP_INFO(get_node()->get_logger(), "Filtered output: %f", filtered_output_);
+  return controller_interface::return_type::OK;
+}
+
+}  // namespace generic_filters_controller
+
+// Export the plugin
+PLUGINLIB_EXPORT_CLASS(generic_filters_controller::GenericFiltersController, controller_interface::ControllerInterface)
+```
+
+---
+
+## **5. Define the Plugin and Build Files**
+
+### 🔨 **5.1. CMakeLists.txt**  
+**Location:**  
+`~/ros2_ws/src/ros2_controls/ros2_controllers/src/generic_filters_controller/CMakeLists.txt`
+
+```cmake
+cmake_minimum_required(VERSION 3.5)
+project(generic_filters_controller)
+
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(control_toolbox REQUIRED)
+find_package(controller_interface REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+
+add_library(${PROJECT_NAME} SHARED src/generic_filters_controller.cpp)
+
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+ament_target_dependencies(${PROJECT_NAME}
+  rclcpp
+  control_toolbox
+  controller_interface
+  pluginlib
+  rclcpp_lifecycle
+)
+
+pluginlib_export_plugin_description_file(controller_interface plugin_description.xml)
+
+install(TARGETS ${PROJECT_NAME}
+  LIBRARY DESTINATION lib
+)
+
+ament_package()
+```
+
+---
+
+### 🔨 **5.2. package.xml**  
+**Location:**  
+`~/ros2_ws/src/ros2_controls/ros2_controllers/src/generic_filters_controller/package.xml`
+
+```xml
+<package format="2">
+  <name>generic_filters_controller</name>
+  <version>0.1.0</version>
+  <description>Generic Filters Plugin for ros2_controls</description>
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <build_depend>rclcpp</build_depend>
+  <build_depend>controller_interface</build_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>control_toolbox</build_depend>
+
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>controller_interface</exec_depend>
+  <exec_depend>pluginlib</exec_depend>
+  <exec_depend>control_toolbox</exec_depend>
+
+  <export>
+    <pluginlib plugin="plugin_description.xml"/>
+  </export>
+</package>
+```
+
+---
+
+### 🔨 **5.3. plugin_description.xml**  
+**Location:**  
+`plugin_description.xml`
+
 ```xml
 <library path="libgeneric_filters_controller.so">
-  <class name="GenericFiltersController"
-         type="generic_filters_controller::GenericFiltersController"
-         base_class_type="controller_interface::ControllerInterface">
-    <description>Generic filters controller for chaining state interfaces.</description>
+  <class name="generic_filters_controller/GenericFiltersController"
+         type="generic_filters_controller::GenericFiltersController">
+    <description>Generic Filters Controller for ros2_controls</description>
   </class>
 </library>
 ```
 
 ---
 
-### ✏️ **Modify CMakeLists.txt:**  
+## **6. Modify Top-level CMakeLists.txt**
+Add this line in **`ros2_controllers/CMakeLists.txt`**:
+
 ```cmake
-add_library(generic_filters_controller SHARED
-  src/generic_filters_controller/generic_filters_controller.cpp
-)
-
-target_include_directories(generic_filters_controller PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
-
-pluginlib_export_plugin_description_file(controller_interface plugin/generic_filters_controller.xml)
-
-ament_export_dependencies(controller_interface)
+add_subdirectory(src/generic_filters_controller)
 ```
 
 ---
 
-✅ **Verify the Build:**  
+## **7. Build the Project**
+Navigate to your workspace root and build the project.
+
 ```bash
 cd ~/ros2_ws
-colcon build --packages-select ros2_controllers
+colcon build --symlink-install
+source install/setup.bash
 ```
 
 ---
 
----
-
-# ✅ **Step 3: Generalize the Filter Plugin**
-
-⏱️ **Time Estimate:** 4-5 hours  
-
-### **Objective:**  
-Transform the filter controller to support **multiple filter types** with dynamic parameters from **control_toolbox**.
-
----
-
-### 🔍 **Why This Matters:**  
-This allows developers to easily switch between **low-pass**, **high-pass**, and **median** filters using ROS2 parameters.
-
----
-
-### 📂 **File Structure (After This Step):**  
-```plaintext
-ros2_controls/
-├── ros2_controllers/
-│   ├── include/generic_filters_controller/generic_filters_controller.hpp
-│   ├── src/generic_filters_controller/generic_filters_controller.cpp
-```
-
----
-
-### 💻 **Commands to Run:**  
+## **8. Test the Plugin**
+Run a ROS2 launch file or node that uses the plugin.  
 ```bash
-# Edit the C++ file
-nano src/generic_filters_controller/generic_filters_controller.cpp
+ros2 run generic_filters_controller generic_filters_controller_node
 ```
 
 ---
 
-### ✏️ **Edit `generic_filters_controller.cpp` to Support Multiple Filters:**  
-```cpp
-#include <control_toolbox/filter_base.hpp>
-#include <control_toolbox/low_pass_filter.hpp>
-#include <control_toolbox/high_pass_filter.hpp>
-#include <control_toolbox/median_filter.hpp>
-
-std::shared_ptr<control_toolbox::FilterBase> filter_;
-
-// Load Parameters
-auto param_listener = std::make_shared<ParamListener>(get_node());
-auto params = param_listener->get_params();
-
-if (params.filter_type == "low_pass") {
-    filter_ = std::make_shared<control_toolbox::LowPassFilter>();
-    filter_->configure(params.cutoff_frequency, get_node());
-} else if (params.filter_type == "high_pass") {
-    filter_ = std::make_shared<control_toolbox::HighPassFilter>();
-} else {
-    filter_ = std::make_shared<control_toolbox::MedianFilter>();
-}
-```
+## **9. Final Steps**
+- Create a PR with your changes.
+- Follow up with a demo in **`ros2_control_demos`** showcasing how the filter works in a controller chain.
 
 ---
 
-✅ **Build and Test:**  
-```bash
-cd ~/ros2_ws
-colcon build --packages-select ros2_controllers
-colcon test --packages-select ros2_controllers
-```
-
----
-
----
-
-# ✅ **Step 4: Create Unit & Integration Tests**
-
-⏱️ **Time Estimate:** 4-6 hours  
-
-### **Objective:**  
-Ensure the controller functions as expected by writing **unit tests** and **integration tests**.
-
----
-
-### 🔍 **Why This Matters:**  
-Automated testing ensures the controller handles edge cases and works with multiple filter types.
-
----
-
-### 📂 **File Structure (After This Step):**  
-```plaintext
-ros2_controls/
-├── ros2_controllers/
-│   ├── test/
-│       └── test_generic_filters_controller.cpp
-```
-
----
-
-### 💻 **Commands to Run:**  
-```bash
-mkdir -p ~/ros2_ws/src/ros2_controls/ros2_controllers/test
-cd ~/ros2_ws/src/ros2_controls/ros2_controllers/test
-nano test_generic_filters_controller.cpp
-```
-
----
-
-### ✏️ **Write a Basic Unit Test:**  
-```cpp
-#include <gtest/gtest.h>
-#include <generic_filters_controller/generic_filters_controller.hpp>
-
-class GenericFiltersControllerTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        controller_ = std::make_shared<generic_filters_controller::GenericFiltersController>();
-    }
-    std::shared_ptr<generic_filters_controller::GenericFiltersController> controller_;
-};
-
-TEST_F(GenericFiltersControllerTest, AppliesLowPassFilter) {
-    double input = 10.0;
-    double expected_output = 5.0;  // Hypothetical
-    ASSERT_NEAR(controller_->filter(input), expected_output, 0.1);
-}
-```
-
----
-
-✅ **Run Tests:**  
-```bash
-colcon build --packages-select ros2_controllers
-colcon test --packages-select ros2_controllers
-colcon test-result --verbose
-```
-
----
-
-✅ **Summary of Steps 1-4:**  
-| **Step** | **Task** | **Time Estimate** |
-|----------|---------|------------------|
-| **1** | Setup workspace and repositories | 2h |
-| **2** | Migrate existing filter to ros2_controls | 3h |
-| **3** | Generalize the filter with parameters | 5h |
-| **4** | Write unit and integration tests | 6h |  
-
-Would you like me to help with specific test cases or build issues? 🚀
+✅ **This plan ensures a structured workflow with a clear file structure, build instructions, and testing process for your ROS2 filter plugin.** 🚀
