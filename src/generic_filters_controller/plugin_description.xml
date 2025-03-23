@@ -1,0 +1,6 @@
+<library path="libgeneric_filters_controller.so">
+  <class name="generic_filters_controller/GenericFiltersController"
+         type="generic_filters_controller::GenericFiltersController">
+    <description>Generic Filters Controller for ros2_controls</description>
+  </class>
+</library>
