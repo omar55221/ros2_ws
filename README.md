@@ -5,18 +5,20 @@ This plan provides a step-by-step guide to creating, integrating, and testing a 
 ---
 
 ## **1. Clone and Prepare Repositories**
+
 Ensure you have all the relevant repositories cloned.
 
 ### **Commands:**
+
 ```bash
 # Navigate to your ROS2 workspace
 mkdir -p /workspaces/ros2_ws/src
 cd /workspaces/ros2_ws/src
 
 # Clone necessary repositories
-git clone https://github.com/ros-controls/ros2_controls.git
-git clone https://github.com/ros-controls/ros2_control_demos.git
-git clone https://github.com/ros-controls/control_toolbox.git
+git clone -b humble https://github.com/ros-controls/ros2_control_demos.git
+git clone -b humble https://github.com/ros-controls/control_toolbox.git
+git clone -b humble https://github.com/ros-controls/ros2_controllers.git
 git clone https://github.com/ros-controls/roscon2024_control_workshop.git
 
 # Source the ROS2 environment
