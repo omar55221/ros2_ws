@@ -1,6 +1,3 @@
-Sure! Here’s a more **detailed and comprehensive plan** for **Steps 1 to 4**, including **file structure**, **commands**, and **explanations**.
-
----
 
 # ✅ **Step 1: Setup Repositories & Environment**
 
