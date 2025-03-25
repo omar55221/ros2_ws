@@ -10,6 +10,18 @@
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/vscode/.bash_history,type=bind"
   ],
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite": {}
+  },
+  "forwardPorts": [6080, 5901],
+  "portsAttributes": {
+    "6080": {
+      "label": "Desktop (Web)"
+    },
+    "5901": {
+      "label": "Desktop (VNC)"
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -39,7 +51,8 @@
         "samadamday.markdown-clever-lists",
         "saoudrizwan.claude-dev",
         "smilerobotics.urdf",
-        "twxs.cmake"
+        "twxs.cmake",
+        "king2021.vnc-extension"
       ]
     }
   }
